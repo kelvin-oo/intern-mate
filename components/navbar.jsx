@@ -84,10 +84,10 @@ export default function Navbar() {
                 </Link>
 
                 <Link 
-                  href="/dashboard" 
+                  href="/overview" 
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center space-x-2 p-2 rounded-md hover:bg-accent ${
-                    pathname === '/dashboard' ? 'text-primary' : 'text-muted-foreground'
+                    pathname === '/overview' ? 'text-primary' : 'text-muted-foreground'
                   }`}
                 >
                   <LayoutDashboard className="h-5 w-5" />
