@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import ComponentLevelLoader from "@/components/Loader";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { Eye, EyeOff } from "lucide-react";
 
 
 
@@ -22,6 +23,7 @@ export default function SignIn() {
   });
   const router = useRouter();
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   // const router = useRouter();
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -171,15 +173,28 @@ export default function SignIn() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
               </div>
               <Button type="submit" className="w-full">
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
