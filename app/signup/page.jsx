@@ -3,6 +3,11 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "react-toastify";
+import { useSignUpEmailStore } from "@/store";
+import { register } from "@/actions/auth/register";
+import ComponentLevelLoader from "@/components/Loader";
+import { useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -10,18 +15,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 import { GoogleButton } from "@/components/ui/google-button";
 import { useState } from "react";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
     applicationType: "",
   });
+  const { setEmail } = useSignUpEmailStore();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const applicationTypes = [
     { value: "job", label: "Job Application" },
@@ -30,10 +38,149 @@ export default function SignUp() {
     { value: "industrial_training", label: "Industrial Training" },
   ];
 
+  const isValidEmail = (email) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add registration logic here
-    console.log(formData);
+
+    setLoading(true);
+
+    const { name, email, password, confirmPassword, applicationType } =
+      formData || {};
+
+    if (!name) {
+      toast.error("Please fill in your Name", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setLoading(false);
+
+      return;
+    }
+
+
+    if (!email) {
+      toast.error("Please enter email", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      
+      setLoading(false);
+
+      return;
+    }
+
+    if (!password) {
+      toast.error("Please choose a password!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setLoading(false);
+
+      return;
+    }
+    if (!confirmPassword) {
+      toast.error("Please confirm your password!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setLoading(false);
+
+      return;
+    
+    }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match", {
+        position: "top-right",
+      });
+      setLoading(false);
+      return;
+    }
+    if (!applicationType) {
+      toast.error("Please select an application type", {
+        position: "top-right",
+      });
+      setLoading(false);
+      return;
+    }
+
+    if (!isValidEmail(email || "")) {
+      toast.error("Email is invalid", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setLoading(false);
+
+      return;
+    }
+
+    setEmail(email)
+    const body = {
+      ...formData,
+    };
+    
+    console.log(body)
+
+    register(body)
+      .then((user) => {
+        if (user.success) {
+          console.log(user.success);
+          toast.success(user.success, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          router.push('/otp')
+        }
+        toast.error(user.error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      })
+      .catch((error) => {
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+        console.log("finally activated");
+      });
   };
 
   const handleChange = (e) => {
@@ -57,7 +204,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="container flex items-center justify-center min-h-screen py-10">
+    <div className="container flex items-center justify-center py-10">
       <Card className="w-full max-w-lg">
         <CardHeader>
           <h1 className="text-2xl font-semibold">Create an Account</h1>
@@ -81,31 +228,20 @@ export default function SignUp() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input
-                    id="firstName"
-                    name="firstName"
-                    placeholder="Enter your first name"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input
-                    id="lastName"
-                    name="lastName"
-                    placeholder="Enter your last name"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
+             
 
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Enter your name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -166,7 +302,7 @@ export default function SignUp() {
               </div>
 
               <Button type="submit" className="w-full">
-                Create Account
+                {loading ? <ComponentLevelLoader text="Creating account..." /> : "Create Account"}
               </Button>
 
               <p className="text-sm text-center text-muted-foreground">

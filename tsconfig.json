@@ -22,6 +22,35 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/page.jsx", "app/layout.jsx", "app/overview/page.jsx", "app/hooks/use-media-query.js", "app/dashboard/page.jsx", "app/components/applications/card.jsx", "app/applications/[id]/page.jsx", "app/applications/new/page.jsx", "app/applications/page.jsx", "app/admin/page.jsx", "app/about/page.jsx", "components/sections/why-choose.jsx", "components/sections/internship-stories.jsx", "components/sections/hero.jsx", "components/dashboard/upcoming-deadlines.jsx", "components/dashboard/stats.jsx", "components/dashboard/recent-applications.jsx", "components/dashboard/header.jsx", "components/applications/filters.jsx", "components/applications/table.jsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.js",
+    "**/*.tsx",
+    "**/*.jsx",
+    ".next/types/**/*.ts",
+    "app/page.jsx",
+    "app/layout.jsx",
+    "app/overview/page.jsx",
+    "app/hooks/use-media-query.js",
+    "app/dashboard/page.jsx",
+    "app/components/applications/card.jsx",
+    "app/applications/[id]/page.jsx",
+    "app/applications/new/page.jsx",
+    "app/applications/page.jsx",
+    "app/admin/page.jsx",
+    "app/about/page.jsx",
+    "components/sections/why-choose.jsx",
+    "components/sections/internship-stories.jsx",
+    "components/sections/hero.jsx",
+    "components/dashboard/upcoming-deadlines.jsx",
+    "components/dashboard/stats.jsx",
+    "components/dashboard/recent-applications.jsx",
+    "components/dashboard/header.jsx",
+    "components/applications/filters.jsx",
+    "components/applications/table.jsx",
+    "app/otp/page.jsx",
+    "actions/**/*.js" // Includes all JS files in the actions folder and its subfolders
+  ],
   "exclude": ["node_modules"]
 }

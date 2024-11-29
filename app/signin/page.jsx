@@ -6,24 +6,123 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { GoogleButton } from "@/components/ui/google-button";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
+import { login } from "@/actions/auth/login";
+import { toast } from "react-toastify";
+import ComponentLevelLoader from "@/components/Loader";
+import { Loader2 } from "lucide-react";
+
+
 
 export default function SignIn() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const router = useRouter();
+  const [loading, setLoading] = useState(false)
+  // const router = useRouter();
+  const handleChange = (e) => {
+    setFormData((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add authentication logic here
-  };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setLoading(true);
+
+    const {  email, password } =
+      formData || {};
+
+
+
+    if (!email) {
+      toast.error("Please enter email", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setLoading(false);
+
+      return;
+    }
+
+    if (!password) {
+      toast.error("Please enter password!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setLoading(false);
+
+      return;
+    }
+
+    if (!isValidEmail(email || "")) {
+      toast.error("Email is invalid", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setLoading(false);
+
+      return;
+    }
+
+    const body = {
+      ...formData,
+    };
+    
+    console.log(body)
+
+    login(body)
+      .then((user) => {
+        if (user.success) {
+          console.log(user.success);
+          router.push('/applications')
+        }
+        toast.error(user.error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      })
+      .catch((error) => {
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+        console.log("finally activated");
+      });
   };
 
   const handleGoogleSignIn = async () => {
@@ -31,7 +130,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="container flex items-center justify-center min-h-screen py-10">
+    <div className="container flex items-center justify-center py-10">
       <Card className="w-full max-w-lg">
         <CardHeader>
           <h1 className="text-2xl font-semibold">Sign In</h1>
@@ -80,7 +179,8 @@ export default function SignIn() {
                 />
               </div>
               <Button type="submit" className="w-full">
-                Sign In
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading ? 'Signing in...' : 'Sign In'}
               </Button>
             </form>
 

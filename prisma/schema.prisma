@@ -27,14 +27,47 @@ enum ApplicationStatus {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  name         String?
-  email        String        @unique
-  image        String?
-  role         Role          @default(USER)
-  applications Application[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id            String     @id @default(cuid())
+  email         String?    @unique
+  name          String?
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role   @default(USER)
+  accounts      Account[]   
+  applications  Application[]
+  comments      Comment[] // Relation to comments
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model VerificationToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
 }
 
 model Internship {
@@ -49,9 +82,11 @@ model Internship {
   status          Status        @default(OPEN)
   createdBy       String // Admin who created this
   applications    Application[]
+  comments        Comment[] // Relation to comments
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 }
+
 
 model Application {
   id        String   @id @default(cuid())
@@ -87,4 +122,18 @@ model Application {
   @@index([userId])
   @@index([status])
   @@index([deadline])
+}
+
+model Comment {
+  id           String     @id @default(cuid())
+  content      String     @db.Text
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  userId       String
+  internshipId String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  internship   Internship @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([internshipId])
 }

@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  images: { unoptimized: true },
+  images: {
+    remotePatterns: [
+        { hostname: 'res.cloudinary.com', protocol: 'https', port: '' },
+        { hostname: 'lh3.googleusercontent.com', protocol: 'https', port: '' },
+    ]
+},
 };
 
 module.exports = nextConfig;
