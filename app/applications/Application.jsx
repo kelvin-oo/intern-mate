@@ -74,20 +74,19 @@ export default function Application({ user }) {
     <div className="container mx-auto p-4 space-y-6">
       {/* Header Section */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full md:w-auto gap-4">
           <h1 className="text-3xl font-bold">Applications</h1>
           <Button 
-                  variant="default"
-                  // onClick={() => setIsOpen(false)}
-                  className="w-full ml-4 flex items-center justify-center space-x-2"
-                >
-                  <Plus className="h-4 w-4" />
-                 <Link href="/applications/new">Submit Internship</Link>
-                </Button>
+            variant="default"
+            className="flex items-center justify-center space-x-2 w-full sm:w-auto"
+          >
+            <Plus className="h-4 w-4" />
+            <Link href="/applications/new" className="whitespace-nowrap">Submit Internship</Link>
+          </Button>
         </div>
         
         {/* Search and Filter Section */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-center">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center w-full md:w-auto">
           <div className="relative flex-1 md:min-w-[300px]">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
