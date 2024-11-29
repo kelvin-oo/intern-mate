@@ -64,9 +64,44 @@ export default function NewApplicationPage() {
   };
 
   async function onSubmit(values) {
+    const { companyName, position, location, applicationLink, deadline, description, requirements, status } = values;
+    
     setIsSubmitting(true);
-      let fileUrl = null;
-      if (selectedFile) {
+    if(!companyName) {
+      toast.error("Company name is required")
+      return;
+    }
+    if(!position) {
+      toast.error("Position is required")
+      return;
+    }     
+    // if(!applicationLink) {
+    //   toast.error("Application link is required")
+    //   return;
+    // }
+    // if(!deadline) {
+    //   toast.error("Deadline is required")
+    //   return;
+    // }
+    if(!description) {
+      toast.error("Description is required")
+      return;
+    }
+    if(!location) {
+      toast.error("Location is required")
+      return;
+    }
+    if(!status) {
+      toast.error("Status is required")
+      return;
+    }
+    if(!emails.length) {
+      toast.error("At least one email is required")
+      return;
+    }
+
+    let fileUrl = null;
+    if (selectedFile) {
         const file = await uploadToS3(selectedFile)
       fileUrl = getS3Url(file.file_key)
     }
