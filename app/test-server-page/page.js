@@ -13,5 +13,5 @@ async function page() {
     </div>
   )
 }
-
+why
 export default page

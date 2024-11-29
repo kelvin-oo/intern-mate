@@ -99,7 +99,7 @@ export function WhyChoose() {
               transition={{ duration: 0.5 }}
               className="inline-block px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary text-sm font-medium mb-4"
             >
-              Features You'll Love
+              Features You&apos;ll Love
             </motion.span>
           </div>
           

@@ -166,7 +166,7 @@ export default function OverviewPage() {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Attention Needed</AlertTitle>
           <AlertDescription>
-            3 applications have deadlines this week. Don't miss out!
+            3 applications have deadlines this week. Don&apos;t miss out!
           </AlertDescription>
         </Alert>
       </div>

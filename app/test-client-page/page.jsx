@@ -1,9 +1,9 @@
 'use client'
-import { useCurrentClientUser } from "@/helpers/use-current-client-user"
+import { currentClientUser } from "@/helpers/current-client-user"
 
 import { LogoutButton } from "@/components/LogoutButton"
 function page() {
-    const user = useCurrentClientUser()
+    const user = currentClientUser()
   return (
     <div>
         <h1>name {user?.name}</h1>
