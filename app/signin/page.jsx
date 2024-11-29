@@ -11,6 +11,7 @@ import { login } from "@/actions/auth/login";
 import { toast } from "react-toastify";
 import ComponentLevelLoader from "@/components/Loader";
 import { Loader2 } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 
 
@@ -140,7 +141,9 @@ export default function SignIn() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <GoogleButton onClick={handleGoogleSignIn} />
+            <GoogleButton onClick={() => {
+            signIn("google");
+          }}/>
             
             <div className="relative">
               <div className="absolute inset-0 flex items-center">

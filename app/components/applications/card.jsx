@@ -60,7 +60,8 @@ export default function ApplicationCard({ application }) {
           <Calendar className="h-4 w-4 mr-2" />
           <div>
             <span className="font-medium text-foreground">Deadline: </span>
-            <span>{new Date(application.deadline).toLocaleDateString()}</span>
+            {/* <span>{new Date(application.deadline).toLocaleDateString()}</span> */}
+            <span>5/5/2024</span>
           </div>
         </div>
         <div className="flex items-center text-muted-foreground">

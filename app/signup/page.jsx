@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useSignUpEmailStore } from "@/store";
 import { register } from "@/actions/auth/register";
 import ComponentLevelLoader from "@/components/Loader";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
   Select,
@@ -214,7 +215,9 @@ export default function SignUp() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <GoogleButton text="Sign up with Google" onClick={handleGoogleSignIn} />
+            <GoogleButton text="Sign up with Google" onClick={() => {
+            signIn("google");
+          }} />
             
             <div className="relative">
               <div className="absolute inset-0 flex items-center">

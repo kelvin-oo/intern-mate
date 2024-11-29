@@ -49,6 +49,21 @@ export const useModalStore = create((set) => ({
   },
 }));
 
+export const useProfileStore = create(
+  persist(
+    (set) => ({
+      name: '',
+      email: '',
+      image: '',
+      setCredentials: (name, email, image) => set({ name, email, image }),
+      clearCredentials: () => set({ name: '', email: '', image: '' })
+    }),
+    {
+      name: 'profile-storage',
+    }
+  )
+);
+
 export const useSignUpEmailStore = create(
   persist(
     (set) => ({

@@ -4,6 +4,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { toast } from "react-toastify";
+import { uploadToS3 } from '@/lib/s3';
+import { getS3Url } from '@/lib/s3';
+
 import {
   Form,
   FormControl,
@@ -14,14 +18,20 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Upload, X } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { createApplication } from "@/actions/application";
+import { useRouter } from 'next/navigation';
 
 export default function NewApplicationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [emails, setEmails] = useState([]);
+  const router = useRouter()
+  const [currentEmail, setCurrentEmail] = useState('');
   const form = useForm({
     defaultValues: {
       companyName: '',
@@ -31,28 +41,76 @@ export default function NewApplicationPage() {
       deadline: '',
       description: '',
       requirements: '',
+      status: 'OPEN', // Added this line
     },
   });
 
+  const handleAddEmail = (e) => {
+    e.preventDefault();
+    if (currentEmail && isValidEmail(currentEmail) && !emails.includes(currentEmail)) {
+      setEmails([...emails, currentEmail]);
+      setCurrentEmail('');
+    } else {
+      toast.error("Invalid Email");
+    }
+  };
+
+  const handleRemoveEmail = (emailToRemove) => {
+    setEmails(emails.filter(email => email !== emailToRemove));
+  };
+
+  const isValidEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   async function onSubmit(values) {
     setIsSubmitting(true);
-    try {
-      // TODO: Implement API call
-      console.log(values);
-      toast({
-        title: 'Success',
-        description: 'Application has been created successfully.',
-      });
-      form.reset();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Something went wrong. Please try again.',
-        variant: 'destructive',
-      });
+      let fileUrl = null;
+      if (selectedFile) {
+        const file = await uploadToS3(selectedFile)
+      fileUrl = getS3Url(file.file_key)
     }
-    setIsSubmitting(false);
+    try {
+      const formData = {
+        ...values,
+        relevantEmails: emails,
+        resourceUrl: fileUrl,
+      };
+      
+      const result = await createApplication(formData);
+      
+      if (result.error) {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success(result.success);
+      router.push("/applications")
+      
+      
+      form.reset();
+      setEmails([]);
+      setSelectedFile(null);
+      setPreviewUrl(null);
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
+
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      if (file.type.startsWith('image/')) {
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+      } else {
+        setPreviewUrl(null);
+      }
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -84,6 +142,47 @@ export default function NewApplicationPage() {
                   <FormControl>
                     <Input placeholder="Enter company name" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Internship Status</FormLabel>
+                  <Select 
+                    onValueChange={field.onChange} 
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="OPEN">
+                        <div className="flex items-center gap-2">
+                          <div className="h-2 w-2 rounded-full bg-green-500" />
+                          Open
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="CLOSED">
+                        <div className="flex items-center gap-2">
+                          <div className="h-2 w-2 rounded-full bg-red-500" />
+                          Closed
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="UPCOMING">
+                        <div className="flex items-center gap-2">
+                          <div className="h-2 w-2 rounded-full bg-yellow-500" />
+                          Upcoming
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -180,6 +279,97 @@ export default function NewApplicationPage() {
                 </FormItem>
               )}
             />
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium">Add Relevant Emails</h3>
+              <div className="space-y-4">
+                <div className="flex gap-2">
+                  <Input
+                    type="email"
+                    placeholder="Enter email address"
+                    value={currentEmail}
+                    onChange={(e) => setCurrentEmail(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button 
+                    type="button"
+                    onClick={handleAddEmail}
+                    variant="secondary"
+                  >
+                    Add
+                  </Button>
+                </div>
+                
+                {/* Email List */}
+                {emails.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {emails.map((email, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-2 bg-secondary px-3 py-1 rounded-full"
+                      >
+                        <span className="text-sm">{email}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveEmail(email)}
+                          className="text-muted-foreground hover:text-foreground"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium">Add Relevant Resource</h3>
+              <div className="flex flex-col items-center gap-4">
+                <label 
+                  htmlFor="file-upload" 
+                  className="w-full cursor-pointer"
+                >
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center gap-2 hover:border-primary transition-colors">
+                    <Upload className="h-6 w-6 text-gray-400" />
+                    <span className="text-sm text-muted-foreground">
+                      Click to upload or drag and drop
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      PDF, PNG, JPG up to 10MB
+                    </span>
+                  </div>
+                </label>
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="hidden"
+                  onChange={handleFileChange}
+                  accept="image/*,.pdf"
+                />
+
+                {selectedFile && (
+                  <div className="w-full">
+                    {previewUrl ? (
+                      <div className="relative w-full h-40 rounded-lg overflow-hidden">
+                        <Image
+                          src={previewUrl}
+                          alt="File preview"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="bg-muted p-4 rounded-lg">
+                        <p className="text-sm text-muted-foreground truncate">
+                          {selectedFile.name}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
 
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? 'Creating...' : 'Create Application'}
