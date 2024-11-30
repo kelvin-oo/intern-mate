@@ -68,10 +68,12 @@ export default function NewApplicationPage() {
     
     setIsSubmitting(true);
     if(!companyName) {
+      setIsSubmitting(false);
       toast.error("Company name is required")
       return;
     }
     if(!position) {
+      setIsSubmitting(false);
       toast.error("Position is required")
       return;
     }     
@@ -84,18 +86,22 @@ export default function NewApplicationPage() {
     //   return;
     // }
     if(!description) {
+      setIsSubmitting(false);
       toast.error("Description is required")
       return;
     }
     if(!location) {
+      setIsSubmitting(false);
       toast.error("Location is required")
       return;
     }
     if(!status) {
+      setIsSubmitting(false);
       toast.error("Status is required")
       return;
     }
     if(!emails.length) {
+      setIsSubmitting(false);
       toast.error("At least one email is required")
       return;
     }
@@ -115,6 +121,7 @@ export default function NewApplicationPage() {
       const result = await createApplication(formData);
       
       if (result.error) {
+        setIsSubmitting(false);
         toast.error(result.error);
         return;
       }
