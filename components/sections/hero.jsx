@@ -45,7 +45,7 @@ export function Hero() {
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/30 rounded-full blur-3xl opacity-20 animate-pulse" />
       </div>
 
-      <div className="container px-4 py-24 relative">
+      <div className="container px-4 relative">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}

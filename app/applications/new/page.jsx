@@ -279,7 +279,17 @@ export default function NewApplicationPage() {
                 <FormItem>
                   <FormLabel>Deadline</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Input 
+                      type="date" 
+                      placeholder="Select a deadline"
+                      {...field}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="[&::-webkit-datetime-edit-text]:text-gray-500 
+                                [&::-webkit-datetime-edit]:text-gray-500 
+                                [&::-webkit-datetime-edit-day-field]:text-gray-500 
+                                [&::-webkit-datetime-edit-month-field]:text-gray-500 
+                                [&::-webkit-datetime-edit-year-field]:text-gray-500"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

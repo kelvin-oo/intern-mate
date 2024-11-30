@@ -41,20 +41,20 @@ const features = [
       "Break down your application process into manageable tasks. Track requirements, documents, and deadlines efficiently.",
     gradient: "from-orange-500 to-red-500",
   },
-  {
-    icon: Target,
-    title: "Goal Setting",
-    description:
-      "Set and track your internship goals. Monitor your progress and celebrate your achievements along the way.",
-    gradient: "from-pink-500 to-rose-500",
-  },
-  {
-    icon: CalendarRange,
-    title: "Timeline View",
-    description:
-      "Visualize your application timeline. Plan ahead and manage your time effectively with our intuitive timeline view.",
-    gradient: "from-cyan-500 to-blue-500",
-  },
+  // {
+  //   icon: Target,
+  //   title: "Goal Setting",
+  //   description:
+  //     "Set and track your internship goals. Monitor your progress and celebrate your achievements along the way.",
+  //   gradient: "from-pink-500 to-rose-500",
+  // },
+  // {
+  //   icon: CalendarRange,
+  //   title: "Timeline View",
+  //   description:
+  //     "Visualize your application timeline. Plan ahead and manage your time effectively with our intuitive timeline view.",
+  //   gradient: "from-cyan-500 to-blue-500",
+  // },
 ];
 
 const containerVariants = {

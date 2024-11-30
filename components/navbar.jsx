@@ -29,7 +29,7 @@ export default function Navbar() {
         {/* Mobile Navigation */}
         <div className="flex items-center justify-between md:hidden">
           <Link href="/" className="flex items-center space-x-2">
-            <Briefcase className="h-6 w-6" />
+            {/* <Briefcase className="h-6 w-6" /> */}
             <span className="font-bold text-xl">InternMate</span>
           </Link>
 
@@ -60,7 +60,7 @@ export default function Navbar() {
                       </span>
                       <span className="text-sm text-muted-foreground">
                         {session?.user?.email || email}
-                      </span>x
+                      </span>
                     </div>
                   </div>
                 )}
@@ -143,7 +143,7 @@ export default function Navbar() {
         <NavigationMenu className="hidden md:block">
           <NavigationMenuList className="flex items-center justify-between w-full">
             <Link href="/" className="flex items-center space-x-2">
-              <Briefcase className="h-6 w-6" />
+              {/* <Briefcase className="h-6 w-6" /> */}
               <span className="font-bold text-xl">InternMate</span>
             </Link>
 

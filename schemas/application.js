@@ -15,10 +15,10 @@ const ApplicationSchema = z.object({
   description: z.string().min(1, {
     message: "Description is required",
   }),
-  resourceUrl: z.string().optional(),
+  resourceUrl: z.string().optional().nullable(), // Updated
   requirements: z.string().optional(),
   status: z.enum(["OPEN", "CLOSED", "UPCOMING"]),
   relevantEmails: z.array(z.string().email()),
 });
 
-export default ApplicationSchema; 
+export default ApplicationSchema;
