@@ -99,7 +99,7 @@ export default function TemplateSelectionPage() {
             <DialogDescription>
               {selectedTemplate && (
                 <>
-                  You've selected the {selectedTemplate.name} template. 
+                  You&apos;ve selected the {selectedTemplate.name} template. 
                   {selectedTemplate.description}
                 </>
               )}

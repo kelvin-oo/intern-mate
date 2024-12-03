@@ -20,7 +20,7 @@ export default function CVBuilderPage() {
         <h1 className="text-4xl font-bold mb-3">Build Your Perfect CV</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
           Choose a method to create your CV. Whether you need a quick template, 
-          full customization, or AI assistance, we've got you covered.
+          full customization, or AI assistance, we&apos;ve got you covered.
         </p>
       </div>
 

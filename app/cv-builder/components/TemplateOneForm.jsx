@@ -932,7 +932,7 @@ export default function TemplateOneForm() {
             <div className="space-y-2">
               <h2 className="text-2xl font-semibold">Personal Information</h2>
               <p className="text-muted-foreground">
-                Let's start with your basic information
+                Let&apos;s start with your basic information
               </p>
             </div>
             <div className="space-y-4">

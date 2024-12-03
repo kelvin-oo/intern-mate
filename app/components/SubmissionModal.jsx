@@ -15,8 +15,8 @@ export function SubmissionModal({ isOpen, onClose, onViewApplications }) {
         <DialogHeader>
           <DialogTitle>Thank you for contributing!</DialogTitle>
           <DialogDescription>
-            Your internship opportunity has been submitted to InternMate. We'll review your submission
-            and notify you via email once it's approved.
+            Your internship opportunity has been submitted to InternMate. We&apos;ll review your submission
+            and notify you via email once it&apos;s approved.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex-col sm:flex-row gap-2">
