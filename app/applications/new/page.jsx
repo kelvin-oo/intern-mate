@@ -24,6 +24,7 @@ import Image from 'next/image';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { createApplication } from "@/actions/application";
 import { useRouter } from 'next/navigation';
+import { SubmissionModal } from '@/app/components/SubmissionModal';
 
 export default function NewApplicationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,6 +33,7 @@ export default function NewApplicationPage() {
   const [emails, setEmails] = useState([]);
   const router = useRouter()
   const [currentEmail, setCurrentEmail] = useState('');
+  const [showSubmissionModal, setShowSubmissionModal] = useState(false);
   const form = useForm({
     defaultValues: {
       companyName: '',
@@ -126,9 +128,7 @@ export default function NewApplicationPage() {
         return;
       }
 
-      toast.success(result.success);
-      router.push("/applications")
-      
+      setShowSubmissionModal(true);
       
       form.reset();
       setEmails([]);
@@ -152,6 +152,14 @@ export default function NewApplicationPage() {
         setPreviewUrl(null);
       }
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowSubmissionModal(false);
+  };
+
+  const handleViewApplications = () => {
+    router.push("/applications");
   };
 
   return (
@@ -429,6 +437,12 @@ export default function NewApplicationPage() {
           </form>
         </Form>
       </Card>
+      
+      <SubmissionModal 
+        isOpen={showSubmissionModal}
+        onClose={handleCloseModal}
+        onViewApplications={handleViewApplications}
+      />
     </div>
   );
 }

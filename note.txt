@@ -1,0 +1,19 @@
+optional additional information
+- leadership roles
+    info
+       position
+       organization
+       duration
+       description
+- Extracurricular Activities
+    info
+      list it out
+- Awards and Honors
+    info
+      list it out
+- Volunteer Work
+    info
+       position
+       organization
+       duration
+       description
