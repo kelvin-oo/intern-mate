@@ -16,19 +16,19 @@ import {
 
 const templates = [
   {
-    id: 'template1',
+    id: 'preview1',
     name: 'Modern Professional',
     description: 'Clean and contemporary design perfect for tech and creative roles',
     image: '/template-picture1.svg',
   },
   {
-    id: 'template2',
+    id: 'preview2',
     name: 'Classic Executive',
     description: 'Traditional layout ideal for corporate and management positions',
     image: '/template-picture1.svg',
   },
   {
-    id: 'template3',
+    id: 'preview3',
     name: 'Creative Portfolio',
     description: 'Dynamic design for creative professionals and designers',
     image: '/template-picture1.svg',
@@ -46,7 +46,7 @@ export default function TemplateSelectionPage() {
   };
 
   const handleContinue = () => {
-    router.push(`/cv-builder/templates/${selectedTemplate.id}`);
+    router.push(`/cv-builder/${selectedTemplate.id}`);
   };
 
   return (

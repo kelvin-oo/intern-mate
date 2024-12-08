@@ -13,11 +13,12 @@ import {
 } from "@/components/ui/card";
 import { X, Award, Users, Trophy, Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useCVStore } from '@/store';
 
-export default function TemplateOneForm() {
+export default function MyInformation() {
   const [step, setStep] = useState(1);
   const [currentCourseWork, setCurrentCourseWork] = useState("");
-  const [currentSkill, setCurrentSkill] = useState({ type: "", value: "" });
+  const [currentSkill, setCurrentSkill] = useState({ category: "", type: "", value: "" });
   const [currentAssociation, setCurrentAssociation] = useState("");
   const [currentOutcome, setCurrentOutcome] = useState("");
   const [currentAward, setCurrentAward] = useState("");
@@ -26,40 +27,50 @@ export default function TemplateOneForm() {
   const [currentActivity, setCurrentActivity] = useState("");
   const [currentVolunteerAchievement, setCurrentVolunteerAchievement] =
     useState("");
+  const [currentResponsibility, setCurrentResponsibility] = useState("");
   const [formData, setFormData] = useState({
-    fullName: "",
-    address: "",
-    email: "",
-    phoneNumber: "",
-    linkedIn: "",
-    profileSummary: "",
-    education: [],
+    fullName: null,
+    address: null,
+    email: null,
+    phoneNumber: null,
+    linkedIn: null,
+    profileSummary:
+      "Motivated and detail-oriented Geoscience student with a proven track record in geological mapping, data analysis, and project management. Passionate about leveraging technology and teamwork to solve complex problems in energy and environmental sectors.",
+    education: {
+      institution: "",
+      degree: "",
+      startDate: "",
+      endDate: "",
+      cgpa: "",
+    },
     relevantCourseWork: [
       "Participated as part of a team of geoscience students in the geological mapping of outcrops in Abeokuta area of Ogun State.",
       "Carried out groundwater investigation at Moshood Abiola Polytechnic, Abeokuta by processing and interpreting data acquired from the application of geophysical methods such as Constant Separation Traversing, Vertical Electrical Sounding, Seismic, Magnetic, and Electromagnetic methods.",
       "Acquisition, processing, and interpretation of Electrical resistivity data to identify possible groundwater location and subsurface fault zones.",
       "Acquisition, processing, and interpretation of VLF data to detect and characterize variations in the electrical conductivity of the earth",
     ],
-    softSkills: [
-      "Teamwork",
-      "Strong organizational skills with experience managing multiple responsibilities effectively",
-      "Problem-solving",
-      "Excellent communication and teamwork abilities developed through leadership roles",
-    ],
-    technicalSkills: [
-      "Programming and Scripting: Proficiency in Python, Bash, or PowerShell for automation",
-      "Data Analysis: Experience with data processing, visualization, and statistical analysis",
-      "Version Control: Proficient with Git for code management and collaboration",
-      "Database Management: Knowledge of SQL and database design principles",
-      "Web Development: Experience with HTML, CSS, and JavaScript",
-    ],
-    tools: [
-      "VSCode for software development",
-      "Microsoft Office Suite (Word, Excel, PowerPoint)",
-      "Git and GitHub for version control",
-      "Project management tools (Jira, Trello)",
-      "Adobe Creative Suite",
-    ],
+    skills: {
+      technical: [
+        "Seismic Data Processing using Petrel and HampsonRussell",
+        "Proficient in Python for geospatial data analysis",
+        "GIS Tools: Experienced with ArcGIS and QGIS",
+        "Advanced knowledge of Microsoft Excel for data modeling",
+        "Remote Sensing and Photogrammetry Techniques",
+      ],
+      soft: [
+        "Strong communication and presentation skills",
+        "Team leadership and conflict resolution abilities",
+        "Adaptability to dynamic and high-pressure environments",
+        "Effective time management and multitasking capabilities",
+      ],
+      tools: [
+        "MATLAB for computational modeling",
+        "Git and GitHub for version control",
+        "Microsoft Office Suite for documentation and presentations",
+        "Trello for project management",
+        "Adobe Illustrator for creating visual reports",
+      ],
+    },
     associations: [
       "American Association of Petroleum Geologists (AAPG) - Student Member",
       "Nigerian Mining and Geosciences Society, UNILAG Chapter - Student Member",
@@ -99,42 +110,36 @@ export default function TemplateOneForm() {
         achievements: [],
       },
     ],
+    experiences: [
+      {
+        company: "Nigerian National Petroleum Corporation (NNPC)",
+        role: "Intern - Geoscience Division",
+        startDate: "2020-06",
+        endDate: "2020-12",
+        responsibilities: [
+          "Assisted in seismic data interpretation and reservoir characterization.",
+          "Participated in geological field studies and data acquisition.",
+          "Prepared detailed reports and presentations on research findings.",
+        ],
+      },
+      {
+        company: "TotalEnergies",
+        role: "Field Assistant",
+        startDate: "2019-01",
+        endDate: "2019-06",
+        responsibilities: [
+          "Collaborated with senior geologists in analyzing core samples.",
+          "Provided logistical support during field operations.",
+          "Documented project progress and maintained equipment inventory.",
+        ],
+      },
+    ],
   });
   const router = useRouter();
-
-  const additionalSections = [
-    {
-      id: "leadership",
-      title: "Leadership Roles",
-      description: "Add positions of responsibility and leadership experience",
-      icon: Users,
-      path: "/cv-builder/form/leadership",
-    },
-    {
-      id: "extracurricular",
-      title: "Extracurricular Activities",
-      description: "Include sports, clubs, and other activities",
-      icon: Award,
-      path: "/cv-builder/form/extracurricular",
-    },
-    {
-      id: "awards",
-      title: "Awards and Honors",
-      description: "Add academic or professional achievements",
-      icon: Trophy,
-      path: "/cv-builder/form/awards",
-    },
-    {
-      id: "volunteer",
-      title: "Volunteer Work",
-      description: "Include community service and volunteering experience",
-      icon: Heart,
-      path: "/cv-builder/form/volunteer",
-    },
-  ];
+  const setCVData = useCVStore((state) => state.setCVData);
 
   const handleNext = () => {
-    if (step < 8) {
+    if (step < 12) {
       setStep(step + 1);
     }
   };
@@ -155,21 +160,14 @@ export default function TemplateOneForm() {
     console.log("Form submitted:", formData);
   };
 
-  const addEducationEntry = () => {
+  const handleEducationChange = (field, value) => {
     setFormData({
       ...formData,
-      education: [
+      education: {
         ...formData.education,
-        { institution: "", degree: "", startDate: "", endDate: "", cgpa: "" },
-      ],
+        [field]: value,
+      },
     });
-  };
-
-  const handleEducationChange = (index, field, value) => {
-    const updatedEducation = formData.education.map((entry, i) =>
-      i === index ? { ...entry, [field]: value } : entry
-    );
-    setFormData({ ...formData, education: updatedEducation });
   };
 
   const handleAddCourseWork = () => {
@@ -194,20 +192,26 @@ export default function TemplateOneForm() {
     });
   };
 
-  const handleAddSkill = (type) => {
+  const handleAddSkill = (category) => {
     if (currentSkill.value.trim()) {
       setFormData({
         ...formData,
-        [type]: [...formData[type], currentSkill.value.trim()],
+        skills: {
+          ...formData.skills,
+          [category]: [...formData.skills[category], currentSkill.value.trim()],
+        },
       });
-      setCurrentSkill({ type: "", value: "" });
+      setCurrentSkill({ category: "", type: "", value: "" });
     }
   };
 
-  const handleRemoveSkill = (type, index) => {
+  const handleRemoveSkill = (category, index) => {
     setFormData({
       ...formData,
-      [type]: formData[type].filter((_, i) => i !== index),
+      skills: {
+        ...formData.skills,
+        [category]: formData.skills[category].filter((_, i) => i !== index),
+      },
     });
   };
 
@@ -313,8 +317,11 @@ export default function TemplateOneForm() {
   };
 
   const handleGenerateCV = () => {
-    console.log(formData);
-    // router.push("/cv-builder/preview");
+    // Save form data to Zustand store with persist
+    setCVData(formData);
+    
+    // Navigate to preview page
+    router.push("/cv-builder/templates");
   };
 
   const addLeadershipEntry = () => {
@@ -471,28 +478,97 @@ export default function TemplateOneForm() {
     });
   };
 
-  const renderSkillSection = (type, title, placeholder) => (
+  const addExperienceEntry = () => {
+    setFormData({
+      ...formData,
+      experiences: [
+        ...formData.experiences,
+        {
+          company: "",
+          role: "",
+          startDate: "",
+          endDate: "",
+          responsibilities: [],
+        },
+      ],
+    });
+  };
+
+  const handleExperienceChange = (index, field, value) => {
+    const updatedExperiences = formData.experiences.map((entry, i) =>
+      i === index ? { ...entry, [field]: value } : entry
+    );
+    setFormData({ ...formData, experiences: updatedExperiences });
+  };
+
+  const handleAddResponsibility = (index) => {
+    if (currentResponsibility.trim()) {
+      const updatedExperiences = formData.experiences.map((entry, i) => {
+        if (i === index) {
+          return {
+            ...entry,
+            responsibilities: [...entry.responsibilities, currentResponsibility.trim()],
+          };
+        }
+        return entry;
+      });
+
+      setFormData({
+        ...formData,
+        experiences: updatedExperiences,
+      });
+      setCurrentResponsibility("");
+    }
+  };
+
+  const handleRemoveResponsibility = (experienceIndex, responsibilityIndex) => {
+    const updatedExperiences = formData.experiences.map((entry, i) => {
+      if (i === experienceIndex) {
+        return {
+          ...entry,
+          responsibilities: entry.responsibilities.filter(
+            (_, j) => j !== responsibilityIndex
+          ),
+        };
+      }
+      return entry;
+    });
+
+    setFormData({
+      ...formData,
+      experiences: updatedExperiences,
+    });
+  };
+
+  const handleRemoveExperienceEntry = (index) => {
+    setFormData({
+      ...formData,
+      experiences: formData.experiences.filter((_, i) => i !== index),
+    });
+  };
+
+  const renderSkillSection = (category, title, placeholder) => (
     <div className="space-y-4">
       <h3 className="text-lg font-medium">{title}</h3>
       <div className="flex flex-col sm:flex-row gap-2">
         <Textarea
-          value={currentSkill.type === type ? currentSkill.value : ""}
-          onChange={(e) => setCurrentSkill({ type, value: e.target.value })}
+          value={currentSkill.category === category ? currentSkill.value : ""}
+          onChange={(e) => setCurrentSkill({ category, value: e.target.value })}
           placeholder={placeholder}
           className="min-h-[100px] flex-grow"
         />
         <Button
           type="button"
-          onClick={() => handleAddSkill(type)}
+          onClick={() => handleAddSkill(category)}
           className="shrink-0 sm:self-start"
         >
           Add {title}
         </Button>
       </div>
 
-      {formData[type].length > 0 && (
+      {formData.skills[category].length > 0 && (
         <div className="space-y-3">
-          {formData[type].map((skill, index) => (
+          {formData.skills[category].map((skill, index) => (
             <div
               key={index}
               className="flex items-start gap-3 p-3 rounded-md bg-muted/50"
@@ -503,7 +579,7 @@ export default function TemplateOneForm() {
                 variant="ghost"
                 size="icon"
                 className="h-8 w-8 shrink-0"
-                onClick={() => handleRemoveSkill(type, index)}
+                onClick={() => handleRemoveSkill(category, index)}
               >
                 <X className="h-4 w-4" />
                 <span className="sr-only">Remove skill</span>
@@ -921,6 +997,155 @@ export default function TemplateOneForm() {
           >
             Add Volunteer Work
           </Button>
+
+          <div className="pt-6">
+            <Button onClick={handleGenerateCV} className="w-full" size="lg">
+              Generate CV
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    if (showingSection === "experiences") {
+      return (
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold">Work Experience</h2>
+            <p className="text-muted-foreground">
+              Add your relevant work experience
+            </p>
+          </div>
+
+          {formData.experiences.map((entry, index) => (
+            <div
+              key={index}
+              className="space-y-4 p-4 bg-muted/30 rounded-lg relative"
+            >
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-2 h-8 w-8"
+                onClick={() => handleRemoveExperienceEntry(index)}
+              >
+                <X className="h-4 w-4" />
+                <span className="sr-only">Remove experience entry</span>
+              </Button>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Company</label>
+                <Input
+                  placeholder="e.g., Nigerian National Petroleum Corporation"
+                  value={entry.company}
+                  onChange={(e) =>
+                    handleExperienceChange(index, "company", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Role</label>
+                <Input
+                  placeholder="e.g., Intern - Geoscience Division"
+                  value={entry.role}
+                  onChange={(e) =>
+                    handleExperienceChange(index, "role", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Duration</label>
+                <div className="flex gap-2">
+                  <Input
+                    type="month"
+                    value={entry.startDate}
+                    onChange={(e) =>
+                      handleExperienceChange(index, "startDate", e.target.value)
+                    }
+                  />
+                  <Input
+                    type="month"
+                    value={entry.endDate}
+                    onChange={(e) =>
+                      handleExperienceChange(index, "endDate", e.target.value)
+                    }
+                    disabled={entry.endDate === "Present"}
+                  />
+                  <label className="flex items-center gap-1">
+                    <input
+                      type="checkbox"
+                      checked={entry.endDate === "Present"}
+                      onChange={(e) =>
+                        handleExperienceChange(
+                          index,
+                          "endDate",
+                          e.target.checked ? "Present" : ""
+                        )
+                      }
+                    />
+                    Present
+                  </label>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <label className="text-sm font-medium">Responsibilities</label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Textarea
+                    value={currentResponsibility}
+                    onChange={(e) => setCurrentResponsibility(e.target.value)}
+                    placeholder="Add a responsibility..."
+                    className="min-h-[100px] flex-grow"
+                  />
+                  <Button
+                    type="button"
+                    onClick={() => handleAddResponsibility(index)}
+                    className="shrink-0 sm:self-start"
+                  >
+                    Add Responsibility
+                  </Button>
+                </div>
+
+                {entry.responsibilities.length > 0 && (
+                  <div className="space-y-3">
+                    {entry.responsibilities.map((responsibility, respIndex) => (
+                      <div
+                        key={respIndex}
+                        className="flex items-start gap-3 p-3 rounded-md bg-muted/50"
+                      >
+                        <p className="flex-grow text-sm leading-relaxed">
+                          {responsibility}
+                        </p>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 shrink-0"
+                          onClick={() =>
+                            handleRemoveResponsibility(index, respIndex)
+                          }
+                        >
+                          <X className="h-4 w-4" />
+                          <span className="sr-only">Remove responsibility</span>
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={addExperienceEntry}
+            className="w-full"
+          >
+            Add Work Experience
+          </Button>
         </div>
       );
     }
@@ -950,7 +1175,7 @@ export default function TemplateOneForm() {
                 <label className="text-sm font-medium">Address</label>
                 <Input
                   name="address"
-                  placeholder="e.g., 123 Main St, City, Country"
+                  placeholder="e.g., Lagos, Nigeria"
                   value={formData.address}
                   onChange={handleChange}
                 />
@@ -994,7 +1219,7 @@ export default function TemplateOneForm() {
             <div className="space-y-2">
               <h2 className="text-2xl font-semibold">Profile Summary</h2>
               <p className="text-muted-foreground">
-                Write a compelling summary of your professional background
+                Write a compelling summary about yourself and your career goals/objectives
               </p>
             </div>
             <div className="space-y-2">
@@ -1018,92 +1243,75 @@ export default function TemplateOneForm() {
                 Add your educational background
               </p>
             </div>
-            {formData.education.map((entry, index) => (
-              <div key={index} className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">
-                    Institution Name
-                  </label>
-                  <Input
-                    placeholder="e.g., University of Lagos, Akoka"
-                    value={entry.institution}
-                    onChange={(e) =>
-                      handleEducationChange(
-                        index,
-                        "institution",
-                        e.target.value
-                      )
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">
-                    Degree/Qualification
-                  </label>
-                  <Input
-                    placeholder="e.g., Bachelor of Science in Geology/Geophysics"
-                    value={entry.degree}
-                    onChange={(e) =>
-                      handleEducationChange(index, "degree", e.target.value)
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Start Date</label>
-                  <Input
-                    type="month"
-                    value={entry.startDate}
-                    onChange={(e) =>
-                      handleEducationChange(index, "startDate", e.target.value)
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">End Date</label>
-                  <div className="flex items-center gap-2">
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Institution</label>
+                <Input
+                  placeholder="e.g., University of Abuja"
+                  value={formData.education.institution}
+                  onChange={(e) => handleEducationChange("institution", e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Degree</label>
+                <Input
+                  placeholder="e.g., Bachelor of Science in Geology"
+                  value={formData.education.degree}
+                  onChange={(e) => handleEducationChange("degree", e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Duration</label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="flex-1">
                     <Input
                       type="month"
-                      value={entry.endDate}
-                      onChange={(e) =>
-                        handleEducationChange(index, "endDate", e.target.value)
-                      }
-                      disabled={entry.endDate === "Present"}
+                      value={formData.education.startDate}
+                      onChange={(e) => handleEducationChange("startDate", e.target.value)}
+                      placeholder="Start Date"
                     />
-                    <label className="flex items-center gap-1">
-                      <input
-                        type="checkbox"
-                        checked={entry.endDate === "Present"}
-                        onChange={(e) =>
-                          handleEducationChange(
-                            index,
-                            "endDate",
-                            e.target.checked ? "Present" : ""
-                          )
-                        }
-                      />
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      type="month"
+                      value={formData.education.endDate}
+                      onChange={(e) => handleEducationChange("endDate", e.target.value)}
+                      disabled={formData.education.endDate === "Present"}
+                      placeholder="End Date"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="presentCheckbox"
+                      checked={formData.education.endDate === "Present"}
+                      onChange={(e) => 
+                        handleEducationChange(
+                          "endDate",
+                          e.target.checked ? "Present" : ""
+                        )
+                      }
+                      className="h-4 w-4"
+                    />
+                    <label htmlFor="presentCheckbox" className="text-sm">
                       Present
                     </label>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">CGPA (Optional)</label>
-                  <Input
-                    placeholder="e.g., 4.5/5.0"
-                    value={entry.cgpa}
-                    onChange={(e) =>
-                      handleEducationChange(index, "cgpa", e.target.value)
-                    }
-                  />
-                </div>
               </div>
-            ))}
-            <Button
-              variant="outline"
-              onClick={addEducationEntry}
-              className="w-full"
-            >
-              Add Another Education
-            </Button>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">CGPA</label>
+                <Input
+                  placeholder="e.g., 4.80"
+                  value={formData.education.cgpa}
+                  onChange={(e) => handleEducationChange("cgpa", e.target.value)}
+                />
+              </div>
+            </div>
           </div>
         );
       case 4:
@@ -1167,7 +1375,148 @@ export default function TemplateOneForm() {
         );
       case 5:
         return (
-          <div className="space-y-8">
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-semibold">Work Experience</h2>
+              <p className="text-muted-foreground">
+                Add your relevant work experience
+              </p>
+            </div>
+
+            {formData.experiences.map((entry, index) => (
+              <div
+                key={index}
+                className="space-y-4 p-4 bg-muted/30 rounded-lg relative"
+              >
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-2 h-8 w-8"
+                  onClick={() => handleRemoveExperienceEntry(index)}
+                >
+                  <X className="h-4 w-4" />
+                  <span className="sr-only">Remove experience entry</span>
+                </Button>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Company</label>
+                  <Input
+                    placeholder="e.g., Nigerian National Petroleum Corporation"
+                    value={entry.company}
+                    onChange={(e) =>
+                      handleExperienceChange(index, "company", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Role</label>
+                  <Input
+                    placeholder="e.g., Intern - Geoscience Division"
+                    value={entry.role}
+                    onChange={(e) =>
+                      handleExperienceChange(index, "role", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Duration</label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="month"
+                      value={entry.startDate}
+                      onChange={(e) =>
+                        handleExperienceChange(index, "startDate", e.target.value)
+                      }
+                    />
+                    <Input
+                      type="month"
+                      value={entry.endDate}
+                      onChange={(e) =>
+                        handleExperienceChange(index, "endDate", e.target.value)
+                      }
+                      disabled={entry.endDate === "Present"}
+                    />
+                    <label className="flex items-center gap-1">
+                      <input
+                        type="checkbox"
+                        checked={entry.endDate === "Present"}
+                        onChange={(e) =>
+                          handleExperienceChange(
+                            index,
+                            "endDate",
+                            e.target.checked ? "Present" : ""
+                          )
+                        }
+                      />
+                      Present
+                    </label>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-sm font-medium">Responsibilities</label>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Textarea
+                      value={currentResponsibility}
+                      onChange={(e) => setCurrentResponsibility(e.target.value)}
+                      placeholder="Add a responsibility..."
+                      className="min-h-[100px] flex-grow"
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => handleAddResponsibility(index)}
+                      className="shrink-0 sm:self-start"
+                    >
+                      Add Responsibility
+                    </Button>
+                  </div>
+
+                  {entry.responsibilities.length > 0 && (
+                    <div className="space-y-3">
+                      {entry.responsibilities.map((responsibility, respIndex) => (
+                        <div
+                          key={respIndex}
+                          className="flex items-start gap-3 p-3 rounded-md bg-muted/50"
+                        >
+                          <p className="flex-grow text-sm leading-relaxed">
+                            {responsibility}
+                          </p>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 shrink-0"
+                            onClick={() =>
+                              handleRemoveResponsibility(index, respIndex)
+                            }
+                          >
+                            <X className="h-4 w-4" />
+                            <span className="sr-only">Remove responsibility</span>
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={addExperienceEntry}
+              className="w-full"
+            >
+              Add Work Experience
+            </Button>
+          </div>
+        );
+      case 6:
+        return (
+          <div className="space-y-6">
             <div className="space-y-2">
               <h2 className="text-2xl font-semibold">Skills & Expertise</h2>
               <p className="text-muted-foreground">
@@ -1176,25 +1525,25 @@ export default function TemplateOneForm() {
             </div>
 
             {renderSkillSection(
-              "softSkills",
-              "Soft Skills",
-              "e.g., Leadership, Communication, Problem Solving..."
+              "technical",
+              "Technical Skills",
+              "e.g., Seismic Data Processing, Python, GIS..."
             )}
 
             {renderSkillSection(
-              "technicalSkills",
-              "Technical Skills",
-              "e.g., Data Analysis, Project Management, Research..."
+              "soft",
+              "Soft Skills",
+              "e.g., Communication, Leadership, Problem Solving..."
             )}
 
             {renderSkillSection(
               "tools",
               "Tools & Software",
-              "e.g., Microsoft Office, AutoCAD, GIS Software..."
+              "e.g., Petrel, HampsonRussell, ArcGIS..."
             )}
           </div>
         );
-      case 6:
+      case 7:
         return (
           <div className="space-y-6">
             <div className="space-y-2">
@@ -1250,7 +1599,7 @@ export default function TemplateOneForm() {
             </div>
           </div>
         );
-      case 7:
+      case 8:
         return (
           <div className="space-y-6">
             <div className="space-y-2">
@@ -1370,50 +1719,407 @@ export default function TemplateOneForm() {
             </Button>
           </div>
         );
-      case 8:
+      case 9:
         return (
           <div className="space-y-6">
             <div className="space-y-2">
-              <h2 className="text-2xl font-semibold">Additional Sections</h2>
+              <h2 className="text-2xl font-semibold">Leadership Roles</h2>
               <p className="text-muted-foreground">
-                Would you like to add any additional sections to your CV?
-                (Optional)
+                Add positions of responsibility and leadership experience
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {additionalSections.map((section) => {
-                const Icon = section.icon;
-                return (
-                  <button
-                    key={section.id}
-                    onClick={() => handleSectionClick(section.id)}
-                    className="group p-4 rounded-lg border bg-card text-left transition-colors hover:bg-accent hover:text-accent-foreground"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="rounded-full p-2 bg-primary/10 text-primary">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div className="space-y-1">
-                        <h3 className="font-medium">{section.title}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {section.description}
-                        </p>
-                      </div>
+            {formData.leadership.map((entry, index) => (
+              <div
+                key={index}
+                className="space-y-4 p-4 bg-muted/30 rounded-lg relative"
+              >
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-2 h-8 w-8"
+                  onClick={() => handleRemoveLeadershipEntry(index)}
+                >
+                  <X className="h-4 w-4" />
+                  <span className="sr-only">Remove leadership entry</span>
+                </Button>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Position</label>
+                  <Input
+                    placeholder="e.g., Team Leader"
+                    value={entry.position}
+                    onChange={(e) =>
+                      handleLeadershipChange(index, "position", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Organization</label>
+                  <Input
+                    placeholder="e.g., University Student Council"
+                    value={entry.organization}
+                    onChange={(e) =>
+                      handleLeadershipChange(index, "organization", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Duration</label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="date"
+                      value={entry.startDate}
+                      onChange={(e) =>
+                        handleLeadershipChange(index, "startDate", e.target.value)
+                      }
+                    />
+                    <Input
+                      type="date"
+                      value={entry.endDate}
+                      onChange={(e) =>
+                        handleLeadershipChange(index, "endDate", e.target.value)
+                      }
+                      disabled={entry.endDate === "Present"}
+                    />
+                    <label className="flex items-center gap-1">
+                      <input
+                        type="checkbox"
+                        checked={entry.endDate === "Present"}
+                        onChange={(e) =>
+                          handleLeadershipChange(
+                            index,
+                            "endDate",
+                            e.target.checked ? "Present" : ""
+                          )
+                        }
+                      />
+                      Present
+                    </label>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-sm font-medium">Achievements</label>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Textarea
+                      value={currentAchievement}
+                      onChange={(e) => setCurrentAchievement(e.target.value)}
+                      placeholder="Add an achievement..."
+                      className="min-h-[100px] flex-grow"
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => handleAddAchievement(index)}
+                      className="shrink-0 sm:self-start"
+                    >
+                      Add Achievement
+                    </Button>
+                  </div>
+
+                  {entry.achievements.length > 0 && (
+                    <div className="space-y-3">
+                      {entry.achievements.map((achievement, achievementIndex) => (
+                        <div
+                          key={achievementIndex}
+                          className="flex items-start gap-3 p-3 rounded-md bg-muted/50"
+                        >
+                          <p className="flex-grow text-sm leading-relaxed">
+                            {achievement}
+                          </p>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 shrink-0"
+                            onClick={() =>
+                              handleRemoveAchievement(index, achievementIndex)
+                            }
+                          >
+                            <X className="h-4 w-4" />
+                            <span className="sr-only">Remove achievement</span>
+                          </Button>
+                        </div>
+                      ))}
                     </div>
-                  </button>
-                );
-              })}
-            </div>
+                  )}
+                </div>
+              </div>
+            ))}
 
-            <div className="pt-6">
-              <Button onClick={handleGenerateCV} className="w-full" size="lg">
-                Generate CV
-              </Button>
-              <p className="text-sm text-muted-foreground text-center mt-2">
-                You can always come back and add more sections later
+            <Button
+              type="button"
+              variant="outline"
+              onClick={addLeadershipEntry}
+              className="w-full"
+            >
+              Add Leadership Role
+            </Button>
+          </div>
+        );
+      case 10:
+        return (
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-semibold">Extracurricular Activities</h2>
+              <p className="text-muted-foreground">
+                Add your activities, clubs, sports, and other involvements
               </p>
             </div>
+
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Textarea
+                  value={currentActivity}
+                  onChange={(e) => setCurrentActivity(e.target.value)}
+                  placeholder="e.g., Captain of the University Football Team - Led team to regional championships"
+                  className="min-h-[100px] flex-grow"
+                />
+                <Button
+                  type="button"
+                  onClick={handleAddActivity}
+                  className="shrink-0 sm:self-start"
+                >
+                  Add Activity
+                </Button>
+              </div>
+
+              {formData.extracurricular.length > 0 && (
+                <div className="space-y-3">
+                  {formData.extracurricular.map((activity, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 p-3 rounded-md bg-muted/50"
+                    >
+                      <p className="flex-grow text-sm leading-relaxed">
+                        {activity}
+                      </p>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 shrink-0"
+                        onClick={() => handleRemoveActivity(index)}
+                      >
+                        <X className="h-4 w-4" />
+                        <span className="sr-only">Remove activity</span>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      case 11:
+        return (
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-semibold">Awards & Honors</h2>
+              <p className="text-muted-foreground">
+                Add any awards or honors you&apos;ve received
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Textarea
+                  value={currentAward}
+                  onChange={(e) => setCurrentAward(e.target.value)}
+                  placeholder="e.g., Dean's List, Outstanding Student Award"
+                  className="min-h-[100px] flex-grow"
+                />
+                <Button
+                  type="button"
+                  onClick={handleAddAward}
+                  className="shrink-0 sm:self-start"
+                >
+                  Add Award
+                </Button>
+              </div>
+
+              {formData.awards.length > 0 && (
+                <div className="space-y-3">
+                  {formData.awards.map((award, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 p-3 rounded-md bg-muted/50"
+                    >
+                      <p className="flex-grow text-sm leading-relaxed">
+                        {award}
+                      </p>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 shrink-0"
+                        onClick={() => handleRemoveAward(index)}
+                      >
+                        <X className="h-4 w-4" />
+                        <span className="sr-only">Remove award</span>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      case 12:
+        return (
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-semibold">Volunteer Work</h2>
+              <p className="text-muted-foreground">
+                Add your volunteer experience and contributions
+              </p>
+            </div>
+
+            {formData.volunteer.map((entry, index) => (
+              <div
+                key={index}
+                className="space-y-4 p-4 bg-muted/30 rounded-lg relative"
+              >
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-2 h-8 w-8"
+                  onClick={() => handleRemoveVolunteerEntry(index)}
+                >
+                  <X className="h-4 w-4" />
+                  <span className="sr-only">Remove volunteer entry</span>
+                </Button>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Position/Role</label>
+                  <Input
+                    placeholder="e.g., Community Outreach Volunteer"
+                    value={entry.position}
+                    onChange={(e) =>
+                      handleVolunteerChange(index, "position", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Organization</label>
+                  <Input
+                    placeholder="e.g., Local Food Bank"
+                    value={entry.organization}
+                    onChange={(e) =>
+                      handleVolunteerChange(index, "organization", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Duration</label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="date"
+                      value={entry.startDate}
+                      onChange={(e) =>
+                        handleVolunteerChange(index, "startDate", e.target.value)
+                      }
+                    />
+                    <Input
+                      type="date"
+                      value={entry.endDate}
+                      onChange={(e) =>
+                        handleVolunteerChange(index, "endDate", e.target.value)
+                      }
+                      disabled={entry.endDate === "Present"}
+                    />
+                    <label className="flex items-center gap-1">
+                      <input
+                        type="checkbox"
+                        checked={entry.endDate === "Present"}
+                        onChange={(e) =>
+                          handleVolunteerChange(
+                            index,
+                            "endDate",
+                            e.target.checked ? "Present" : ""
+                          )
+                        }
+                      />
+                      Present
+                    </label>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-sm font-medium">
+                    Key Contributions & Achievements
+                  </label>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Textarea
+                      value={currentVolunteerAchievement}
+                      onChange={(e) =>
+                        setCurrentVolunteerAchievement(e.target.value)
+                      }
+                      placeholder="Add a contribution or achievement..."
+                      className="min-h-[100px] flex-grow"
+                    />
+                    <Button
+                      type="button"
+                      onClick={() => handleAddVolunteerAchievement(index)}
+                      className="shrink-0 sm:self-start"
+                    >
+                      Add Achievement
+                    </Button>
+                  </div>
+
+                  {entry.achievements.length > 0 && (
+                    <div className="space-y-3">
+                      {entry.achievements.map((achievement, achievementIndex) => (
+                        <div
+                          key={achievementIndex}
+                          className="flex items-start gap-3 p-3 rounded-md bg-muted/50"
+                        >
+                          <p className="flex-grow text-sm leading-relaxed">
+                            {achievement}
+                          </p>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 shrink-0"
+                            onClick={() =>
+                              handleRemoveVolunteerAchievement(
+                                index,
+                                achievementIndex
+                              )
+                            }
+                          >
+                            <X className="h-4 w-4" />
+                            <span className="sr-only">Remove achievement</span>
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={addVolunteerEntry}
+              className="w-full"
+            >
+              Add Volunteer Work
+            </Button>
+
+            {/* <div className="pt-6">
+              <Button onClick={handleGenerateCV} className="w-full" size="lg">
+                Generate CVsssssssssss
+              </Button>
+            </div> */}
           </div>
         );
       default:
@@ -1426,41 +2132,28 @@ export default function TemplateOneForm() {
       <Card className="border-none shadow-none">
         <CardHeader className="px-0">
           {showingSection === "main" && (
-            <ProgressBar step={step} totalSteps={8} />
+            <ProgressBar step={step} totalSteps={12} />
           )}
         </CardHeader>
         <CardContent className="px-0">{renderStep()}</CardContent>
         <CardFooter className="px-0 flex justify-between gap-4">
-          {showingSection !== "main" ? (
-            <>
-              <Button
-                onClick={() => setShowingSection("main")}
-                variant="outline"
-                className="w-full"
-              >
-                Back to Sections
-              </Button>
-              <Button onClick={handleGenerateCV} className="w-full">
-                Generate CV
-              </Button>
-            </>
+          {step > 1 && (
+            <Button
+              onClick={handleBack}
+              variant="outline"
+              className="w-full"
+            >
+              Back
+            </Button>
+          )}
+          {step < 12 ? (
+            <Button onClick={handleNext} className="w-full">
+              Continue
+            </Button>
           ) : (
-            <>
-              {step > 1 && step < 8 && (
-                <Button
-                  onClick={handleBack}
-                  variant="outline"
-                  className="w-full"
-                >
-                  Back
-                </Button>
-              )}
-              {step < 8 ? (
-                <Button onClick={handleNext} className="w-full">
-                  Continue
-                </Button>
-              ) : null}
-            </>
+            <Button onClick={handleGenerateCV} className="w-full">
+              Generate CV
+            </Button>
           )}
         </CardFooter>
       </Card>

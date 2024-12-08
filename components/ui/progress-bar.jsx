@@ -13,9 +13,10 @@ export function ProgressBar({ step, totalSteps }) {
       <div className="flex justify-between mt-2 text-xs text-muted-foreground">
         <span>Personal Info</span>
         <span>Summary</span>
-        <span>Education</span>
-        <span>Experience</span>
-        <span>Skills</span>
+        <span>Relevant Course Work</span>
+        <span>Skills & Expertise</span>
+        <span>Professional Associations</span>
+        <span>Certifications</span>
       </div>
     </div>
   );

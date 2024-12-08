@@ -5,6 +5,7 @@ import { FileText, Pencil, Brain, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
+import { Badge } from "@/components/ui/badge";
 
 export default function CVBuilderPage() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function CVBuilderPage() {
               </p>
               <Button 
                 className="w-full"
-                onClick={() => handleOptionClick('templates')}
+                onClick={() => handleOptionClick('my-information')}
               >
                 Start with a Template
                 <ChevronRight className="h-4 w-4 ml-2" />
@@ -50,8 +51,11 @@ export default function CVBuilderPage() {
           </Card>
 
           {/* Custom Option */}
-          <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="flex flex-col h-full">
+          <Card className="p-6 hover:shadow-lg transition-shadow duration-300 relative">
+            <Badge className="absolute top-4 right-4 bg-yellow-500" variant="secondary">
+              Coming Soon
+            </Badge>
+            <div className="flex flex-col h-full opacity-60">
               <div className="mb-4">
                 <Pencil className="h-12 w-12 text-green-500" />
               </div>
@@ -63,7 +67,7 @@ export default function CVBuilderPage() {
               </p>
               <Button 
                 className="w-full"
-                onClick={() => handleOptionClick('custom')}
+                disabled
               >
                 Start Editing
                 <ChevronRight className="h-4 w-4 ml-2" />
@@ -72,8 +76,11 @@ export default function CVBuilderPage() {
           </Card>
 
           {/* AI Option */}
-          <Card className="p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="flex flex-col h-full">
+          <Card className="p-6 hover:shadow-lg transition-shadow duration-300 relative">
+            <Badge className="absolute top-4 right-4 bg-yellow-500" variant="secondary">
+              Coming Soon
+            </Badge>
+            <div className="flex flex-col h-full opacity-60">
               <div className="mb-4">
                 <Brain className="h-12 w-12 text-purple-500" />
               </div>
@@ -85,7 +92,7 @@ export default function CVBuilderPage() {
               </p>
               <Button 
                 className="w-full"
-                onClick={() => handleOptionClick('ai')}
+                disabled
               >
                 Generate with AI
                 <ChevronRight className="h-4 w-4 ml-2" />

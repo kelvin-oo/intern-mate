@@ -94,7 +94,7 @@ export default function Navbar() {
                   <span>Dashboard</span>
                 </Link>
                 
-                <Link 
+                <Link
                   href="/applications"
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center space-x-2 p-2 rounded-md hover:bg-accent ${
@@ -103,6 +103,17 @@ export default function Navbar() {
                 >
                   <FileText className="h-5 w-5" />
                   <span>Applications</span>
+                </Link>
+
+                <Link 
+                  href="/cv-builder"
+                  onClick={() => setIsOpen(false)}
+                  className={`flex items-center space-x-2 p-2 rounded-md hover:bg-accent ${
+                    pathname === '/cv-builder' ? 'text-primary' : 'text-muted-foreground'
+                  }`}
+                >
+                  <FileText className="h-5 w-5" />
+                  <span>CV Builder</span>
                 </Link>
 
                 <Link 
@@ -194,6 +205,18 @@ export default function Navbar() {
                   >
                     <BookOpen className="h-4 w-4" />
                     <span>Resources</span>
+                  </Link>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <Link 
+                    href="/cv-builder" 
+                    className={`flex items-center space-x-1 ${
+                      pathname === '/cv-builder' ? 'text-primary' : 'text-muted-foreground'
+                    }`}
+                  >
+                    <FileText className="h-4 w-4" />
+                    <span>CV Builder</span>
                   </Link>
                 </NavigationMenuItem>
               </div>

@@ -77,3 +77,16 @@ export const useSignUpEmailStore = create(
   )
 );
 
+export const useCVStore = create(
+  persist(
+    (set) => ({
+      cvData: null,
+      setCVData: (data) => set({ cvData: data }),
+      clearCVData: () => set({ cvData: null }),
+    }),
+    {
+      name: 'cv-storage',
+    }
+  )
+);
+
