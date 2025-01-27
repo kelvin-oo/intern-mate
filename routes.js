@@ -25,4 +25,4 @@ export const publicRoutes = [
    * The default redirect paths after logging in
    */
   
-  export const DEFAULT_LOGIN_REDIRECT = "/applications";
+  export const DEFAULT_LOGIN_REDIRECT = "/internships";

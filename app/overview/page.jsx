@@ -48,22 +48,22 @@ const weeklyData = {
 };
 
 const statusData = {
-  labels: ['Not Started', 'In Progress', 'Applied', 'Accepted', 'Rejected'],
+  labels: ['Yet to apply', 'Applied'],
   datasets: [{
-    data: [5, 5, 15, 3, 2],
+    data: [5, 2,],
     backgroundColor: [
       'rgba(148, 163, 184, 0.7)',
-      'rgba(147, 51, 234, 0.7)',
+      // 'rgba(147, 51, 234, 0.7)',
       'rgba(34, 197, 94, 0.7)',
-      'rgba(59, 130, 246, 0.7)',
-      'rgba(239, 68, 68, 0.7)',
+      // 'rgba(59, 130, 246, 0.7)',
+      // 'rgba(239, 68, 68, 0.7)',
     ],
     borderColor: [
-      'rgb(148, 163, 184)',
-      'rgb(147, 51, 234)',
-      'rgb(34, 197, 94)',
-      'rgb(59, 130, 246)',
-      'rgb(239, 68, 68)',
+      'rgba(148, 163, 184, 0.7)',
+      // 'rgba(147, 51, 234, 0.7)',
+      'rgba(34, 197, 94, 0.7)',
+      // 'rgba(59, 130, 246, 0.7)',
+      // 'rgba(239, 68, 68, 0.7)',
     ],
     borderWidth: 1,
   }]

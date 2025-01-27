@@ -91,18 +91,18 @@ export default function Navbar() {
                   }`}
                 >
                   <LayoutDashboard className="h-5 w-5" />
-                  <span>Dashboard</span>
+                  <span>Overview</span>
                 </Link>
                 
                 <Link
-                  href="/applications"
+                  href="/internships"
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center space-x-2 p-2 rounded-md hover:bg-accent ${
-                    pathname === '/applications' ? 'text-primary' : 'text-muted-foreground'
+                    pathname === '/internships' ? 'text-primary' : 'text-muted-foreground'
                   }`}
                 >
                   <FileText className="h-5 w-5" />
-                  <span>Applications</span>
+                  <span>Internships</span>
                 </Link>
 
                 <Link 
@@ -155,7 +155,7 @@ export default function Navbar() {
           <NavigationMenuList className="flex items-center justify-between w-full">
             <Link href="/" className="flex items-center space-x-2">
               {/* <Briefcase className="h-6 w-6" /> */}
-              <span className="font-bold text-xl">InternMate</span>
+              <span className="font-bold text-xl pr-2">InternMate</span>
             </Link>
 
             <div className="flex items-center space-x-6">
@@ -174,25 +174,25 @@ export default function Navbar() {
 
                 <NavigationMenuItem>
                   <Link 
-                    href="/dashboard" 
+                    href="/overview" 
                     className={`flex items-center space-x-1 ${
-                      pathname === '/dashboard' ? 'text-primary' : 'text-muted-foreground'
+                      pathname === '/overview' ? 'text-primary' : 'text-muted-foreground'
                     }`}
                   >
                     <LayoutDashboard className="h-4 w-4" />
-                    <span>Dashboard</span>
+                    <span>Overview</span>
                   </Link>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
                   <Link 
-                    href="/applications" 
+                    href="/internships" 
                     className={`flex items-center space-x-1 ${
-                      pathname === '/applications' ? 'text-primary' : 'text-muted-foreground'
+                      pathname === '/internships' ? 'text-primary' : 'text-muted-foreground'
                     }`}
                   >
                     <FileText className="h-4 w-4" />
-                    <span>Applications</span>
+                    <span>Internships</span>
                   </Link>
                 </NavigationMenuItem>
 

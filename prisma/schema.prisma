@@ -15,15 +15,12 @@ enum Role {
 enum Status {
   OPEN
   CLOSED
-  UPCOMING
+  UNKNOWN
 }
 
 enum ApplicationStatus {
-  NOT_APPLIED
-  IN_PROGRESS
   APPLIED
-  ACCEPTED
-  REJECTED
+  NOT_APPLIED
 }
 
 model User {
@@ -78,9 +75,11 @@ model Internship {
   description     String?
   requirements    String?
   resourceUrl     String?
+  companyWebsite  String?
   contactEmails   String[]
   status          Status        @default(OPEN)
   createdBy       String // Admin who created this
+  
   applications    Application[]
   comments        Comment[] // Relation to comments
   createdAt       DateTime      @default(now())
@@ -90,37 +89,13 @@ model Internship {
 model Application {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Basic Information
-  companyName     String
-  position        String
-  location        String
-  applicationLink String?
-  deadline        DateTime
-  description     String   @db.Text
-  requirements    String[] // Array of requirement strings
-  salary          String?
-
-  // Application Status
   status ApplicationStatus @default(NOT_APPLIED)
-
-  // Timeline tracking (for graphs and analytics)
-  appliedDate      DateTime?
-  lastStatusChange DateTime?
-
-  // Notes and tracking
-  notes String? @db.Text
-
-  // Relations
   userId       String // For authentication
   User         User        @relation(fields: [userId], references: [id])
   Internship   Internship? @relation(fields: [internshipId], references: [id])
   internshipId String?
-
   @@index([userId])
   @@index([status])
-  @@index([deadline])
 }
 
 model Comment {

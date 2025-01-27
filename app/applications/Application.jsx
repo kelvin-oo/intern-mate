@@ -45,14 +45,14 @@ const mockApplications = [
   // Add more mock data as needed
 ];
 
-export default function Application({ user }) {
+export default function Application({ user, applications }) {
   
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const isMobile = useMediaQuery('(max-width: 768px)');
   const sessionuser = currentClientUser()
   
-  const filteredApplications = mockApplications.filter(app => {
+  const filteredApplications = applications.filter(app => {
     const matchesSearch = app.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          app.location.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'all' || app.status === statusFilter;

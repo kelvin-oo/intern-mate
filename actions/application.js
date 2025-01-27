@@ -9,6 +9,7 @@ export async function createApplication(values) {
   const user = await currentServerUser();
   
   if (!validatedFields.success) {
+    console.log(validatedFields.error);
     return { error: "Invalid fields!" };
   }
 
@@ -48,3 +49,31 @@ export async function createApplication(values) {
     return { error: "Something went wrong!" };
   }
 } 
+
+export async function getApplications() {
+  const applications = await db.internship.findMany({});
+  return applications;
+}
+
+export async function getApplication(id) {
+  const application = await db.internship.findUnique({
+    where: { id },
+  });
+  return application;
+}
+
+export async function updateApplication(id, values) {
+  const application = await db.application.create({
+    where: { id },
+    data: values,
+  });
+  return application;
+}
+
+export async function deleteApplication(id) {
+  await db.internship.delete({
+    where: { id },
+  });
+}
+
+
