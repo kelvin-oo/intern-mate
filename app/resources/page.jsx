@@ -4,7 +4,7 @@ export default function ComingSoon() {
         <div className="text-center space-y-6">
           <h1 className="text-3xl font-bold">Resources Page Coming Soon 🚀</h1>
           <p className="text-lg">
-          We're working hard to bring you valuable tools and information. Stay tuned for updates—you won’t want to miss it!
+          We are working hard to bring you valuable tools and information. Stay tuned for updates—you won&apos;t want to miss it!
           </p>
           
           
