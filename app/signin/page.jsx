@@ -101,7 +101,7 @@ export default function SignIn() {
       .then((user) => {
         if (user.success) {
           console.log(user.success);
-          router.push('/applications')
+          router.push('/internships')
         }
         toast.error(user.error, {
           position: "top-right",
